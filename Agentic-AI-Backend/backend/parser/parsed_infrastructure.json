@@ -1,0 +1,173 @@
+{
+  "detected_architecture_type": "Classic 3-Tier Web App",
+  "primary_tech_stack": [
+    "AWS",
+    "WebSphere Commerce Suite (WCS)",
+    "Amazon EC2",
+    "Amazon RDS",
+    "Amazon S3",
+    "Amazon Route 53"
+  ],
+  "components": [
+    {
+      "id": "vpc_boundary",
+      "name": "VPC",
+      "type": "Network Boundary",
+      "technology": null,
+      "is_cloud_managed": true,
+      "enclosed_within": null,
+      "connections": []
+    },
+    {
+      "id": "az_1",
+      "name": "AZ-1",
+      "type": "Network Boundary",
+      "technology": null,
+      "is_cloud_managed": true,
+      "enclosed_within": "vpc_boundary",
+      "connections": []
+    },
+    {
+      "id": "az_2",
+      "name": "AZ-2",
+      "type": "Network Boundary",
+      "technology": null,
+      "is_cloud_managed": true,
+      "enclosed_within": "vpc_boundary",
+      "connections": []
+    },
+    {
+      "id": "route_53",
+      "name": "Amazon Route 53",
+      "type": "DNS / Routing",
+      "technology": "Route 53",
+      "is_cloud_managed": true,
+      "enclosed_within": null,
+      "connections": [
+        "cdn"
+      ]
+    },
+    {
+      "id": "cdn",
+      "name": "CDN",
+      "type": "DNS / Routing",
+      "technology": "CloudFront",
+      "is_cloud_managed": true,
+      "enclosed_within": null,
+      "connections": [
+        "elb_web"
+      ]
+    },
+    {
+      "id": "s3",
+      "name": "Amazon S3",
+      "type": "Storage",
+      "technology": "S3",
+      "is_cloud_managed": true,
+      "enclosed_within": null,
+      "connections": [
+        "cdn"
+      ]
+    },
+    {
+      "id": "elb_web",
+      "name": "Elastic Load Balancing",
+      "type": "Load Balancer",
+      "technology": "ELB",
+      "is_cloud_managed": true,
+      "enclosed_within": "vpc_boundary",
+      "connections": [
+        "ec2_web_az1",
+        "wcs_ihs_az2"
+      ]
+    },
+    {
+      "id": "ec2_web_az1",
+      "name": "Amazon EC2",
+      "type": "Compute / Compute Layer",
+      "technology": "EC2",
+      "is_cloud_managed": false,
+      "enclosed_within": "az_1",
+      "connections": [
+        "elb_app"
+      ]
+    },
+    {
+      "id": "wcs_ihs_az2",
+      "name": "WCS IHS",
+      "type": "Compute / Compute Layer",
+      "technology": "WebSphere IHS",
+      "is_cloud_managed": false,
+      "enclosed_within": "az_2",
+      "connections": [
+        "elb_app"
+      ]
+    },
+    {
+      "id": "elb_app",
+      "name": "Elastic Load Balancing",
+      "type": "Load Balancer",
+      "technology": "ELB",
+      "is_cloud_managed": true,
+      "enclosed_within": "vpc_boundary",
+      "connections": [
+        "ec2_app_az1",
+        "wcs_solr_az2"
+      ]
+    },
+    {
+      "id": "ec2_app_az1",
+      "name": "Amazon EC2",
+      "type": "Compute / Compute Layer",
+      "technology": "EC2",
+      "is_cloud_managed": false,
+      "enclosed_within": "az_1",
+      "connections": [
+        "rds_az1"
+      ]
+    },
+    {
+      "id": "wcs_solr_az2",
+      "name": "WCS Solr",
+      "type": "Compute / Compute Layer",
+      "technology": "Solr",
+      "is_cloud_managed": false,
+      "enclosed_within": "az_2",
+      "connections": [
+        "wcs_db_az2"
+      ]
+    },
+    {
+      "id": "rds_az1",
+      "name": "Amazon RDS",
+      "type": "Database",
+      "technology": "RDS",
+      "is_cloud_managed": true,
+      "enclosed_within": "az_1",
+      "connections": []
+    },
+    {
+      "id": "wcs_db_az2",
+      "name": "WCS DB",
+      "type": "Database",
+      "technology": "Database",
+      "is_cloud_managed": false,
+      "enclosed_within": "az_2",
+      "connections": []
+    },
+    {
+      "id": "management_layer",
+      "name": "Management Layer",
+      "type": "Management / Governance",
+      "technology": null,
+      "is_cloud_managed": true,
+      "enclosed_within": "vpc_boundary",
+      "connections": []
+    }
+  ],
+  "visual_anomalies_or_notes": [
+    "Amazon EBS is shown in the Application Subsystem but lacks explicit directional arrows to compute nodes.",
+    "Management Layer contains CloudWatch, CloudTrail, and Trusted Advisor as a grouped block without internal connections.",
+    "WCS DB and WCS Solr are treated as self-hosted/custom software stacks (is_cloud_managed: false)."
+  ]
+}
