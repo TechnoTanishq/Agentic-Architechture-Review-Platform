@@ -163,3 +163,12 @@ Python service endpoints (called internally by Spring Boot):
 | Database | MongoDB Atlas |
 | File storage | Cloudinary |
 | AI service | Python FastAPI, LangGraph, Groq (LLaMA), Gemini Vision |
+
+
+## Team 
+
+1. Tanishq Kathar
+2. Arushi Shesh
+3. Nishil Nair
+4. Arnav Abhang
+5. Janhavi Burande
